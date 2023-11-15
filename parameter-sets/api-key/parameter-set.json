@@ -1,0 +1,24 @@
+{
+    "meta" : {
+        "label": "Dataiku instances",
+        "description": "",
+        "icon": "icon-puzzle-piece"
+    },
+    "defaultDefinableInline": true,
+    "defaultDefinableAtProjectLevel": true,
+    "pluginParams": [
+    ],
+
+    "params": [
+        {
+            "name": "dss_client_url",
+            "label": "DSS client URL",
+            "type": "STRING"
+        },
+        {
+            "name": "dss_client_api_key",
+            "label": "API key",
+            "type": "PASSWORD"
+        }
+    ]
+}

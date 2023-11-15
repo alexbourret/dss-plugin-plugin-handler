@@ -1,0 +1,17 @@
+{
+    "meta" : {
+        "label": "Custom dataset plugin-usage_usage",
+        "description": "",
+        "icon": "icon-puzzle-piece"
+    },
+    "readable": true,
+    "writable": false,
+    "params": [
+        {
+            "name": "presets",
+            "label": "Dataiku instances",
+            "type": "PRESETS",
+            "parameterSetId": "api-key"
+        }
+    ]
+}
