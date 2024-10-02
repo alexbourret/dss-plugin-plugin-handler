@@ -1,0 +1,81 @@
+{
+    "meta": {
+        "label": "Rewrite raw parameters",
+        "description": "",
+        "icon": "icon-puzzle-piece"
+    },
+    "kind": "PYTHON",
+    "selectableFromDataset": "input_dataset",
+    "inputRoles": [
+        {
+            "name": "input_dataset",
+            "label": "Dataset containing parameters to rewrite",
+            "description": "",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
+        }
+    ],
+
+    "outputRoles": [
+        {
+            "name": "api_output",
+            "label": "Main output",
+            "description": "",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
+        }
+    ],
+    "params": [
+        {
+            "name": "preset",
+            "label": "Dataiku instances",
+            "type": "PRESET",
+            "parameterSetId": "api-key"
+        },
+        {
+            "name": "plugin_id",
+            "label": "Plugin ID",
+            "description": "",
+            "type": "COLUMN",
+            "columnRole": "input_dataset"
+        },
+        {
+            "name": "element_kind",
+            "label": "Element kind",
+            "description": "",
+            "type": "COLUMN",
+            "columnRole": "input_dataset"
+        },
+        {
+            "name": "project_key",
+            "label": "Project key",
+            "description": "",
+            "type": "COLUMN",
+            "columnRole": "input_dataset"
+        },
+        {
+            "name": "object_id",
+            "label": "Object ID",
+            "description": "",
+            "type": "COLUMN",
+            "columnRole": "input_dataset"
+        },
+        {
+            "name": "old_raw_params",
+            "label": "Old raw parameters",
+            "description": "",
+            "type": "COLUMN",
+            "columnRole": "input_dataset"
+        },
+        {
+            "name": "new_raw_params",
+            "label": "New raw parameters",
+            "description": "",
+            "type": "COLUMN",
+            "columnRole": "input_dataset"
+        }
+    ],
+    "resourceKeys": []
+}
