@@ -1,7 +1,7 @@
 {
     "meta": {
         "label": "Rewrite raw parameters",
-        "description": "",
+        "description": "Mass update datasets and recipes raw parameters",
         "icon": "icon-puzzle-piece"
     },
     "kind": "PYTHON",
@@ -33,13 +33,6 @@
             "label": "Dataiku instances",
             "type": "PRESET",
             "parameterSetId": "api-key"
-        },
-        {
-            "name": "plugin_id",
-            "label": "Plugin ID",
-            "description": "",
-            "type": "COLUMN",
-            "columnRole": "input_dataset"
         },
         {
             "name": "element_kind",
