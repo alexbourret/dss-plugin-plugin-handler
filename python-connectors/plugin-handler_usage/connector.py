@@ -1,6 +1,5 @@
-from six.moves import xrange
 from dataiku.connector import Connector
-from plugin_usage_common import RecordsLimit
+from plugin_handler_common import RecordsLimit
 import dataikuapi
 import dataiku
 
@@ -12,17 +11,21 @@ class PluginsUsageConnector(Connector):
         self.presets = config.get("presets", [])
 
     def get_read_schema(self):
-        return {"columns" : [ 
-            {"name": "Plugin ID", "type" : "string"},
-            {"name" :"Plugin version", "type" : "string"},
-            {"name" :"Plugin element ID", "type" : "string"},
-            {"name" :"Element kind", "type" : "string"},
-            {"name" :"Project key", "type" : "string"},
-            {"name" :"Used in", "type" : "string"}
-        ]}
+        return {
+            "columns": [
+                {"name": "dss_client", "type": "string"},
+                {"name": "plugin_id", "type": "string"},
+                {"name": "plugin_version", "type": "string"},
+                {"name": "element_type", "type": "string"},
+                {"name": "element_kind", "type": "string"},
+                {"name": "project_key", "type": "string"},
+                {"name": "object_id", "type": "string"},
+                {"name": "raw_params", "type": "object"}
+            ]
+        }
 
     def generate_rows(self, dataset_schema=None, dataset_partitioning=None,
-                            partition_id=None, records_limit = -1):
+                      partition_id=None, records_limit=-1):
         limit = RecordsLimit(records_limit)
         if not self.presets:
             self.presets = [{}]
@@ -32,6 +35,7 @@ class PluginsUsageConnector(Connector):
             if dss_client_url:
                 client = dataikuapi.DSSClient(dss_client_url, dss_client_api_key)
             else:
+                dss_client_url = "Local"
                 client = dataiku.api_client()
             plugins = client.list_plugins()
             for plugin in plugins:
@@ -42,30 +46,44 @@ class PluginsUsageConnector(Connector):
                     plugin_usages = plugin_handle.list_usages()
                     if plugin_usages.usages:
                         for plugin_usage in plugin_usages.usages:
+                            raw_params = None
+                            project = client.get_project(plugin_usage.project_key)
+                            if plugin_usage.object_type == "RECIPE":
+                                recipe = project.get_recipe(plugin_usage.object_id)
+                                recipe_settings = recipe.get_settings()
+                                raw_params = recipe_settings.raw_params
+                            elif plugin_usage.object_type == "DATASET":
+                                dataset = project.get_dataset(plugin_usage.object_id)
+                                dataset_settings = dataset.get_settings()
+                                raw_params = dataset_settings.get_raw_params()
                             yield {
-                                "Plugin ID": plugin_id,
-                                "Plugin version": plugin_version,
-                                "Plugin element ID": plugin_usage.element_type,
-                                "Element kind": plugin_usage.element_kind,
-                                "Project key": plugin_usage.project_key,
-                                "Used in": plugin_usage.object_id
+                                "dss_client": dss_client_url,
+                                "plugin_id": plugin_id,
+                                "plugin_version": plugin_version,
+                                "element_type": plugin_usage.element_type,
+                                "element_kind": plugin_usage.element_kind,
+                                "project_key": plugin_usage.project_key,
+                                "object_id": plugin_usage.object_id,
+                                "raw_params": raw_params
                             }
                             if limit.is_reached():
-                                break
+                                return
                     else:
                         yield {
-                            "Plugin ID": plugin_id,
-                            "Plugin version": plugin_version,
-                            "Plugin element ID": None,
-                            "Element kind": None,
-                            "Project key": None,
-                            "Used in": None
+                            "dss_client": dss_client_url,
+                            "plugin_id": plugin_id,
+                            "plugin_version": plugin_version,
+                            "element_type": None,
+                            "element_kind": None,
+                            "project_key": None,
+                            "object_id": None,
+                            "raw_params": None
                         }
                         if limit.is_reached():
-                            break
+                            return
 
     def get_writer(self, dataset_schema=None, dataset_partitioning=None,
-                         partition_id=None):
+                   partition_id=None):
         """
         Returns a writer object to write in the dataset (or in a partition).
 
