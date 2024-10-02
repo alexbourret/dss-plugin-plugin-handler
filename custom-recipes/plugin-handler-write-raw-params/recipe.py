@@ -48,7 +48,7 @@ output_schema.append({'name': 'final_raw_parameters', 'type': 'object'})
 output_dataset.write_schema(output_schema)
 
 preset = config.get("preset", {})
-dss_client_url = preset.get("dss_client")
+dss_client_url = preset.get("dss_client_url")
 dss_client_api_key = preset.get("dss_client_api_key")
 
 if dss_client_url:
