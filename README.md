@@ -24,6 +24,7 @@ The flow below gives an example of URL being changed in datasets and recipes use
 - All the plugins usages of the instance(s) are first extracted in the `Plugin_used` dataset, using this plugin's `Plugin usage` dataset.
 - A local copy is made. This dataset contains a `raw_params` column that need to be adjusted with new URL. 
 - In a prepare recipe, we first filter out all the rows that are not concerned by the change. In this example we retrict the change to the pi-system plugin inside the PLUGINSMETA project.
+
 ![](images/prepare_steps_to_rewrite_params.png)
 
 - We create a new `new_raw_parameters` column containing the modified parameters comming from `raw_params`. This modification is made with a Python code step containing the following code:
@@ -39,7 +40,7 @@ def process(row):
     return raw_params
 ```
 
-- Finally, the modified parameters are pushed back to the instance using the `Rewrite raw parameters` recipe. 
+- Finally, the modified parameters are pushed back to the instance using the `Rewrite raw parameters` recipe.
 
 ![](images/rewrite_recipe_ui.png)
 
