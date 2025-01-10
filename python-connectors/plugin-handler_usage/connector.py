@@ -2,6 +2,11 @@ from dataiku.connector import Connector
 from plugin_handler_common import RecordsLimit
 import dataikuapi
 import dataiku
+import logging
+
+
+logging.basicConfig(level=logging.INFO, format='dss-plugin-handler %(levelname)s - %(message)s')
+logger = logging.getLogger()
 
 
 class PluginsUsageConnector(Connector):
@@ -54,8 +59,13 @@ class PluginsUsageConnector(Connector):
                                 raw_params = recipe_settings.raw_params
                             elif plugin_usage.object_type == "DATASET":
                                 dataset = project.get_dataset(plugin_usage.object_id)
-                                dataset_settings = dataset.get_settings()
-                                raw_params = dataset_settings.get_raw_params()
+                                raw_params = None
+                                try:
+                                    dataset_settings = dataset.get_settings()
+                                    raw_params = dataset_settings.get_raw_params()
+                                except Exception as exception:
+                                    logger.error("Dataset {} could not be retrieved".format(plugin_usage.object_id))
+                                    continue
                             yield {
                                 "dss_client": dss_client_url,
                                 "plugin_id": plugin_id,
