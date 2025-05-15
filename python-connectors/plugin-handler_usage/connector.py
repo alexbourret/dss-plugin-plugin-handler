@@ -48,7 +48,11 @@ class PluginsUsageConnector(Connector):
                 plugin_version = plugin.get("version")
                 if plugin_id:
                     plugin_handle = client.get_plugin(plugin_id)
-                    plugin_usages = plugin_handle.list_usages()
+                    try:
+                        plugin_usages = plugin_handle.list_usages()
+                    except Exception as error:
+                        logger.error("Error with plugin '{}': {}. Skipping.".format(plugin_id, error))
+                        continue
                     if plugin_usages.usages:
                         for plugin_usage in plugin_usages.usages:
                             raw_params = None
