@@ -75,6 +75,6 @@ def process(row):
 
 - Finally, the modified parameters are pushed back to the instance using the `Rewrite raw parameters` recipe.
 
-![](images/rewrite_recipe_ui.png)
+![](images/rewrite_fs_recipe_parameters.png)
 
 Note that for safety reason, the previous `raw_parameters` has to be provided. If these parameters have changed in the meantime, the rewrite operation is cancelled for that one item.
