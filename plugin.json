@@ -1,11 +1,12 @@
 {
     "id": "plugin-handler",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "meta": {
         "label": "Plugin handler",
         "description": "Plugin handling for Dataiku DSS",
         "author": "Alex Bourret",
         "icon": "icon-puzzle-piece",
+        "category": "Operationalize",
         "tags": [],
         "url": "",
         "licenseInfo": "Apache Software License"
