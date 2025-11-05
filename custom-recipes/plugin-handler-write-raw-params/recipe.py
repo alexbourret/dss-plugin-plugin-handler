@@ -85,6 +85,10 @@ with output_dataset.get_writer() as writer:
             object_handle = project.get_dataset(object_id)
             dataset_settings = object_handle.get_settings()
             current_raw_params = dataset_settings.get_raw_params()
+        elif element_kind == "python-fs-providers":
+            object_handle = project.get_dataset(object_id)
+            dataset_settings = object_handle.get_settings()
+            current_raw_params = dataset_settings.get_raw_params()
         if current_raw_params == old_raw_params_dict:
             data["message"] = "Matching"
             new_raw_params = input_parameters_row.get(new_raw_params_column)
