@@ -3,6 +3,7 @@ from plugin_handler_common import RecordsLimit
 import dataikuapi
 import dataiku
 import logging
+import json
 
 
 logging.basicConfig(level=logging.INFO, format='dss-plugin-handler %(levelname)s - %(message)s')
@@ -78,7 +79,7 @@ class PluginsUsageConnector(Connector):
                                 "element_kind": plugin_usage.element_kind,
                                 "project_key": plugin_usage.project_key,
                                 "object_id": plugin_usage.object_id,
-                                "raw_params": raw_params
+                                "raw_params": json.dumps(raw_params)
                             }
                             if limit.is_reached():
                                 return
