@@ -1,6 +1,6 @@
 {
     "id": "plugin-handler",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "meta": {
         "label": "Plugin handler",
         "description": "Plugin handling for Dataiku DSS",
