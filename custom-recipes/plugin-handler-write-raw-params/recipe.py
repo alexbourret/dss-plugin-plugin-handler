@@ -70,25 +70,27 @@ with output_dataset.get_writer() as writer:
         data["element_kind"] = element_kind
         data["dataset_id"] = dataset_id
         try:
-            old_raw_params_dict = ast.literal_eval(old_raw_params)
+            # old_raw_params_dict = ast.literal_eval(old_raw_params)
+            old_raw_params_dict = json.loads(old_raw_params)
         except Exception as err:
-            print("ALX:error={}".format(err))
-            pass
+            data["error_message"] = "Invalid JSON in old_raw_params: {}".format(err)
+            writer.write_row_dict(data)
+            continue
         current_raw_params = None
         project = client.get_project(project_key)
         object_handle = None
         if element_kind == "custom-recipes":
             object_handle = project.get_recipe(object_id)
-            recipe_settings = object_handle.get_settings()
-            current_raw_params = recipe_settings.raw_params
+            item_settings = object_handle.get_settings()
+            current_raw_params = item_settings.raw_params
         elif element_kind == "python-connectors":
             object_handle = project.get_dataset(object_id)
-            dataset_settings = object_handle.get_settings()
-            current_raw_params = dataset_settings.get_raw_params()
+            item_settings = object_handle.get_settings()
+            current_raw_params = item_settings.get_raw_params()
         elif element_kind == "python-fs-providers":
             object_handle = project.get_dataset(object_id)
-            dataset_settings = object_handle.get_settings()
-            current_raw_params = dataset_settings.get_raw_params()
+            item_settings = object_handle.get_settings()
+            current_raw_params = item_settings.get_raw_params()
         if current_raw_params == old_raw_params_dict:
             data["message"] = "Matching"
             new_raw_params = input_parameters_row.get(new_raw_params_column)
@@ -103,7 +105,7 @@ with output_dataset.get_writer() as writer:
             print("ALX:type new_raw_params_dict={}".format(type(new_raw_params_dict)))
             if isinstance(new_raw_params_dict, dict):
                 current_raw_params = copy_dict_from_to(new_raw_params_dict, current_raw_params)
-                dataset_settings.save()
+                item_settings.save()
                 data["message"] = "OK"
             else:
                 data["error_message"] = "New params is not a valid dictionary"
