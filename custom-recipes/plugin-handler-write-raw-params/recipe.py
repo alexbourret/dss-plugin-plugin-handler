@@ -70,10 +70,12 @@ with output_dataset.get_writer() as writer:
         data["element_kind"] = element_kind
         data["dataset_id"] = dataset_id
         try:
-            old_raw_params_dict = ast.literal_eval(old_raw_params)
+            # old_raw_params_dict = ast.literal_eval(old_raw_params)
+            old_raw_params_dict = json.loads(old_raw_params)
         except Exception as err:
-            print("ALX:error={}".format(err))
-            pass
+            data["error_message"] = "Invalid JSON in old_raw_params: {}".format(err)
+            writer.write_row_dict(data)
+            continue
         current_raw_params = None
         project = client.get_project(project_key)
         object_handle = None
